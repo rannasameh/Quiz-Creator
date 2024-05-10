@@ -1,24 +1,59 @@
-import { Grid, TextField } from "@mui/material";
-import { useCallback, useState } from "react";
+import { Box, Button, Dialog, Grid, TextField } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import quizzezData from "../../Static/Files/QuizzesData.json";
+import AddOrEditQuiz from "./Components/AddOrEditQuiz";
 import Quiz from "./Components/Quiz";
+import { useDispatch, useSelector } from "react-redux";
+import { storeQuizzesData } from "../../actions/actions";
 
 const Quizzes = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState(quizzezData);
 
-  const handleSearch = useCallback((e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
+  const [filteredData, setFilteredData] = useState([]);
+  const [openAddNewQuiz, setOpenAddNewQuiz] = useState(false);
+  const quizzes = useSelector((state) => state.quizzes.quizzesData);
+  const dispatch = useDispatch();
 
-    const filtered = quizzezData.filter((item) =>
-      item?.title?.toLowerCase().includes(searchTerm)
-    );
-    setFilteredData(filtered);
-  }, []);
+  useEffect(() => {
+    // read quizzes from file only for the first render when no new data is added
+    !quizzes.length && dispatch(storeQuizzesData(quizzezData));
+  }, [dispatch]);
+
+  useEffect(() => {
+    quizzes && setFilteredData(quizzes);
+  }, [quizzes]);
+
+  const handleSearch = useCallback(
+    (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      setSearchTerm(searchTerm);
+
+      const filtered = quizzes.filter((item) =>
+        item?.title?.toLowerCase().includes(searchTerm)
+      );
+      setFilteredData(filtered);
+    },
+    [quizzes]
+  );
 
   return (
     <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "flex-start", md: "flex-end" },
+          flexDirection: "row",
+          columnGap: 2,
+        }}
+      >
+        <Button
+          variant="outlined"
+          style={{ color: "black", borderColor: "black" }}
+          onClick={() => setOpenAddNewQuiz(true)}
+        >
+          Add
+        </Button>
+      </Box>
       <TextField
         placeholder="Search..."
         value={searchTerm}
@@ -39,6 +74,9 @@ const Quizzes = () => {
           </Grid>
         ))}
       </Grid>
+      <Dialog onClose={() => setOpenAddNewQuiz(false)} open={openAddNewQuiz}>
+        <AddOrEditQuiz setOpenAddNewQuiz={setOpenAddNewQuiz} />
+      </Dialog>
     </>
   );
 };
