@@ -1,11 +1,13 @@
-import { Grid, TextField } from "@mui/material";
+import { Box, Button, Dialog, Grid, TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import quizzezData from "../../Static/Files/QuizzesData.json";
+import AddOrEditQuiz from "./Components/AddOrEditQuiz";
 import Quiz from "./Components/Quiz";
 
 const Quizzes = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState(quizzezData);
+  const [openAddNewQuiz, setOpenAddNewQuiz] = useState(false);
 
   const handleSearch = useCallback((e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -19,6 +21,22 @@ const Quizzes = () => {
 
   return (
     <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "flex-start", md: "flex-end" },
+          flexDirection: "row",
+          columnGap: 2,
+        }}
+      >
+        <Button
+          variant="outlined"
+          style={{ color: "black", borderColor: "black" }}
+          onClick={() => setOpenAddNewQuiz(true)}
+        >
+          Add
+        </Button>
+      </Box>
       <TextField
         placeholder="Search..."
         value={searchTerm}
@@ -39,6 +57,9 @@ const Quizzes = () => {
           </Grid>
         ))}
       </Grid>
+      <Dialog onClose={() => setOpenAddNewQuiz(false)} open={openAddNewQuiz}>
+        <AddOrEditQuiz setOpenAddNewQuiz={setOpenAddNewQuiz} />
+      </Dialog>
     </>
   );
 };
