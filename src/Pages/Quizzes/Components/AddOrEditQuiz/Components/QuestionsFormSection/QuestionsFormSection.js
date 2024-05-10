@@ -165,7 +165,7 @@ const QuestionsFormSection = () => {
             <Typography
               style={{ fontSize: 17, paddingTop: 10, paddingBottom: 10 }}
             >
-              Correct Answer for question {index + 1}
+              Correct Answer for question {index + 1}:
             </Typography>
             <FieldArray name={`questions_answers.${index}.answers`}>
               {() => (

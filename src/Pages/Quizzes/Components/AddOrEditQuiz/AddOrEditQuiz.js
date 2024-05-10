@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import FormField from "../../../../commonComponents/FormField/FormField";
 import { Box, Button, Typography } from "@mui/material";
 import QuestionsFormSection from "./Components/QuestionsFormSection/QuestionsFormSection";
+import { useDispatch } from "react-redux";
+import { addQuizData } from "../../../../actions/actions";
 
 const initialValues = {
   created: "",
@@ -40,10 +42,19 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-const AddOrEditQuiz = () => {
+const AddOrEditQuiz = ({ setOpenAddNewQuiz }) => {
+  const dispatch = useDispatch();
+
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    const currentDate =
+      new Date().toISOString().split("T")[0] +
+      " " +
+      new Date().toLocaleTimeString();
+
+    values.created = currentDate;
+    dispatch(addQuizData(values));
     setSubmitting(false);
+    setOpenAddNewQuiz(false);
   };
 
   return (
