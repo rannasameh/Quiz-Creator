@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import FormField from "../../../../commonComponents/FormField/FormField";
 import { Box, Button, Typography } from "@mui/material";
 import QuestionsFormSection from "./Components/QuestionsFormSection/QuestionsFormSection";
@@ -19,6 +20,26 @@ const initialValues = {
   ],
 };
 
+const validationSchema = Yup.object().shape({
+  description: Yup.string().required("Description is required"),
+  title: Yup.string().required("Title is required"),
+  url: Yup.string().required("URL is required"),
+  questions_answers: Yup.array().of(
+    Yup.object().shape({
+      text: Yup.string().required("Question text is required"),
+      feedback_false: Yup.string().required(
+        "Question false feedback is required"
+      ),
+      feedback_true: Yup.string().required("Question true feedback required"),
+      answers: Yup.array().of(
+        Yup.object().shape({
+          text: Yup.string().required("Answer text is required"),
+        })
+      ),
+    })
+  ),
+});
+
 const AddOrEditQuiz = () => {
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values);
@@ -32,6 +53,7 @@ const AddOrEditQuiz = () => {
       </Typography>
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ handleSubmit }) => (
