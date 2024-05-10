@@ -17,7 +17,7 @@ const formatDate = (dateString) => {
 };
 
 const Quiz = ({ quiz }) => {
-  const { title, description, created, url } = quiz;
+  const { title, description, created } = quiz;
   return (
     <Card>
       <CardContent>
