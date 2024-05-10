@@ -16,11 +16,8 @@ const Layout = () => {
     >
       <Box style={{ flex: 1 }} sx={{ pl: 5, pr: 5 }}>
         <Navbar />
-        <Box sx={{ marginTop: { xs: "25%", sm: "8%" } }}>
-          <Outlet />
-        </Box>
+        <Outlet />
       </Box>
-
       <Footer />
     </div>
   );

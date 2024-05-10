@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import logo from "../../Static/Images/logo.jpeg";
 const Navbar = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box >
       <AppBar
         position="static"
         style={{ backgroundColor: "white", boxShadow: "none" }}
