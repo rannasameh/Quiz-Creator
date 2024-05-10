@@ -17,7 +17,7 @@ const Quizzes = () => {
   useEffect(() => {
     // read quizzes from file only for the first render when no new data is added
     !quizzes.length && dispatch(storeQuizzesData(quizzezData));
-  }, [dispatch]);
+  }, [dispatch, quizzes]);
 
   useEffect(() => {
     quizzes && setFilteredData(quizzes);
