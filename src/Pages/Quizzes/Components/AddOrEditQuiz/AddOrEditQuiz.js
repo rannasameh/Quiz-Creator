@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormField from "../../../../commonComponents/FormField/FormField";
 import { Box, Button, Typography } from "@mui/material";
 import QuestionsFormSection from "./Components/QuestionsFormSection/QuestionsFormSection";
-import { useDispatch } from "react-redux";
-import { addQuizData } from "../../../../actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuizData, updateLastIndices } from "../../../../actions/actions";
 
 const initialValues = {
   created: "",
@@ -44,6 +44,51 @@ const validationSchema = Yup.object().shape({
 
 const AddOrEditQuiz = ({ setOpenAddNewQuiz }) => {
   const dispatch = useDispatch();
+  const quizzes = useSelector((state) => state.quizzes);
+
+  const generateDataWithIds = useCallback(
+    (values) => {
+      // Handles the generation of IDs to mimic the behavior of creating entities on the frontend rather than the backend.
+      // It ensures that each entity (quiz, question, answer) receives a unique identifier before being stored in the Redux state.
+      let lastQuizIndex = quizzes.lastQuizIndex;
+      let lastQuestionIndex = quizzes.lastQuestionIndex;
+      let lastAnswerIndex = quizzes.lastAnswerIndex;
+
+      const quizWithIds = {
+        ...values,
+        id: lastQuizIndex,
+        questions_answers: values.questions_answers.map((question) => {
+          const questionId = lastQuestionIndex;
+          lastQuestionIndex++;
+
+          return {
+            ...question,
+            id: questionId,
+            answers: question.answers.map((answer) => {
+              const answerId = lastAnswerIndex;
+              lastAnswerIndex++;
+
+              return {
+                ...answer,
+                id: answerId,
+              };
+            }),
+          };
+        }),
+      };
+
+      const indices = {
+        lastQuizIndex: lastQuizIndex + 1,
+        lastQuestionIndex,
+        lastAnswerIndex,
+      };
+
+      dispatch(updateLastIndices(indices));
+
+      return quizWithIds;
+    },
+    [dispatch, quizzes]
+  );
 
   const handleSubmit = (values, { setSubmitting }) => {
     const currentDate =
@@ -52,7 +97,9 @@ const AddOrEditQuiz = ({ setOpenAddNewQuiz }) => {
       new Date().toLocaleTimeString();
 
     values.created = currentDate;
-    dispatch(addQuizData(values));
+    const quizWithids = generateDataWithIds(values);
+
+    dispatch(addQuizData(quizWithids));
     setSubmitting(false);
     setOpenAddNewQuiz(false);
   };

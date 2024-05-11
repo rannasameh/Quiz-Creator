@@ -1,5 +1,8 @@
 const initialState = {
   quizzesData: [],
+  lastQuestionIndex: 4, // Given that the file already has 3 questions
+  lastQuizIndex: 2, // Given that the file already has 1 quiz
+  lastAnswerIndex: 10, // Given that the file already has 9 quiz
 };
 
 const quizzesReducer = (state = initialState, action) => {
@@ -14,6 +17,13 @@ const quizzesReducer = (state = initialState, action) => {
         ...state,
         quizzesData: [...state.quizzesData, action.payload],
       };
+    case "UPDATE_LAST_INDICES":
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case "CLEAR_ALL_DATA":
+      return initialState;
     default:
       return state;
   }

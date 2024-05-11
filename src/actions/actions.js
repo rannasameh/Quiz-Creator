@@ -7,3 +7,12 @@ export const addQuizData = (newQuizData) => ({
   type: "ADD_QUIZ_DATA",
   payload: newQuizData,
 });
+
+export const updateLastIndices = (indices) => ({
+  type: "UPDATE_LAST_INDICES",
+  payload: indices,
+});
+
+export const clearAllData = () => ({
+  type: "CLEAR_ALL_DATA",
+});
