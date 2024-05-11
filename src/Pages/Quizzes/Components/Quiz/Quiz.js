@@ -3,6 +3,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 
 const formatDate = (dateString) => {
   var parts = dateString.split(" ");
@@ -18,6 +19,7 @@ const formatDate = (dateString) => {
 
 const Quiz = ({ quiz }) => {
   const { title, description, created } = quiz;
+  const navigate = useNavigate();
   return (
     <Card>
       <CardContent>
@@ -32,6 +34,7 @@ const Quiz = ({ quiz }) => {
           size="small"
           variant="contained"
           sx={{ backgroundColor: "black" }}
+          onClick={() => navigate(`/quiz/${quiz.id}`)}
         >
           More Details{" "}
         </Button>
