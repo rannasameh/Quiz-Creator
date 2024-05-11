@@ -13,6 +13,11 @@ export const updateLastIndices = (indices) => ({
   payload: indices,
 });
 
+export const updateQuiz = (updatedQuiz) => ({
+  type: "UPDATE_QUIZ",
+  payload: updatedQuiz,
+});
+
 export const clearAllData = () => ({
   type: "CLEAR_ALL_DATA",
 });

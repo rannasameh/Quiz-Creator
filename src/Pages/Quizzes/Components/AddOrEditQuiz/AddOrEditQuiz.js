@@ -1,51 +1,67 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormField from "../../../../commonComponents/FormField/FormField";
 import { Box, Button, Typography } from "@mui/material";
 import QuestionsFormSection from "./Components/QuestionsFormSection/QuestionsFormSection";
 import { useDispatch, useSelector } from "react-redux";
-import { addQuizData, updateLastIndices } from "../../../../actions/actions";
+import {
+  addQuizData,
+  updateLastIndices,
+  updateQuiz,
+} from "../../../../actions/actions";
+import { useParams } from "react-router-dom";
+import { getQuizById } from "../../../../selectors";
 
-const initialValues = {
-  created: "",
-  description: "",
-  title: "",
-  url: "",
-  questions_answers: [
-    {
-      text: "",
-      feedback_false: "",
-      feedback_true: "",
-      answers: [{ text: "", is_true: false }],
-    },
-  ],
-};
-
-const validationSchema = Yup.object().shape({
-  description: Yup.string().required("Description is required"),
-  title: Yup.string().required("Title is required"),
-  url: Yup.string().required("URL is required"),
-  questions_answers: Yup.array().of(
-    Yup.object().shape({
-      text: Yup.string().required("Question text is required"),
-      feedback_false: Yup.string().required(
-        "Question false feedback is required"
-      ),
-      feedback_true: Yup.string().required("Question true feedback required"),
-      answers: Yup.array().of(
-        Yup.object().shape({
-          text: Yup.string().required("Answer text is required"),
-        })
-      ),
-    })
-  ),
-});
-
-const AddOrEditQuiz = ({ setOpenAddNewQuiz }) => {
+const AddOrEditQuiz = ({ setOpen, isEdit }) => {
   const dispatch = useDispatch();
   const quizzes = useSelector((state) => state.quizzes);
+  const { id } = useParams();
+  const quiz = useSelector((state) => getQuizById(state, id));
 
+  const initialValues = useMemo(
+    () => ({
+      id: "",
+      created: "",
+      description: "",
+      title: "",
+      url: "",
+      questions_answers: [
+        {
+          text: "",
+          feedback_false: "",
+          feedback_true: "",
+          answers: [{ text: "", is_true: false }],
+        },
+      ],
+    }),
+    []
+  );
+  const validationSchema = useMemo(
+    () =>
+      Yup.object().shape({
+        description: Yup.string().required("Description is required"),
+        title: Yup.string().required("Title is required"),
+        url: Yup.string().required("URL is required"),
+        questions_answers: Yup.array().of(
+          Yup.object().shape({
+            text: Yup.string().required("Question text is required"),
+            feedback_false: Yup.string().required(
+              "Question false feedback is required"
+            ),
+            feedback_true: Yup.string().required(
+              "Question true feedback required"
+            ),
+            answers: Yup.array().of(
+              Yup.object().shape({
+                text: Yup.string().required("Answer text is required"),
+              })
+            ),
+          })
+        ),
+      }),
+    []
+  );
   const generateDataWithIds = useCallback(
     (values) => {
       // Handles the generation of IDs to mimic the behavior of creating entities on the frontend rather than the backend.
@@ -95,22 +111,25 @@ const AddOrEditQuiz = ({ setOpenAddNewQuiz }) => {
       new Date().toISOString().split("T")[0] +
       " " +
       new Date().toLocaleTimeString();
-
-    values.created = currentDate;
-    const quizWithids = generateDataWithIds(values);
-
-    dispatch(addQuizData(quizWithids));
+    if (isEdit) {
+      values.modified = currentDate;
+      dispatch(updateQuiz(values));
+    } else {
+      values.created = currentDate;
+      const quizWithids = generateDataWithIds(values);
+      dispatch(addQuizData(quizWithids));
+    }
     setSubmitting(false);
-    setOpenAddNewQuiz(false);
+    setOpen(false);
   };
 
   return (
     <Box style={{ padding: 50 }}>
       <Typography style={{ fontSize: 23, paddingTop: 10, paddingBottom: 10 }}>
-        Add new quiz
+        {isEdit ? "Edit" : "Add new"} quiz
       </Typography>
       <Formik
-        initialValues={initialValues}
+        initialValues={isEdit ? quiz : initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
