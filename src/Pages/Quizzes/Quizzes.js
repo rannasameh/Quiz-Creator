@@ -75,7 +75,7 @@ const Quizzes = () => {
         ))}
       </Grid>
       <Dialog onClose={() => setOpenAddNewQuiz(false)} open={openAddNewQuiz}>
-        <AddOrEditQuiz setOpenAddNewQuiz={setOpenAddNewQuiz} />
+        <AddOrEditQuiz setOpen={setOpenAddNewQuiz} />
       </Dialog>
     </>
   );

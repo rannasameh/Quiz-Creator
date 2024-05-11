@@ -22,6 +22,13 @@ const quizzesReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
       };
+    case "UPDATE_QUIZ":
+      return {
+        ...state,
+        quizzesData: state.quizzesData.map((quiz) =>
+          quiz.id === action.payload.id ? action.payload : quiz
+        ),
+      };
     case "CLEAR_ALL_DATA":
       return initialState;
     default:
