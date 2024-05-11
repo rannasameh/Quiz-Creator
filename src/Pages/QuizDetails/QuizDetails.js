@@ -56,7 +56,7 @@ const QuizDetail = () => {
           </Typography>
           <Box style={{ display: "flex", flexDirection: "column", rowGap: 15 }}>
             {quiz.questions_answers.map((question, index) => (
-              <Box>
+              <Box key={index}>
                 <Typography style={{ fontSize: 17 }}>
                   {index + 1} - {question.text}
                 </Typography>

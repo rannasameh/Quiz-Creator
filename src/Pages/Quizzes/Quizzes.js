@@ -68,8 +68,8 @@ const Quizzes = () => {
         rowSpacing={4}
         columnSpacing={4}
       >
-        {filteredData.map((quiz) => (
-          <Grid item xs={12} sm={6}>
+        {filteredData.map((quiz, index) => (
+          <Grid item xs={12} sm={6} key={index}>
             <Quiz quiz={quiz} />
           </Grid>
         ))}
