@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import FormField from "../../../../commonComponents/FormField/FormField";
+import FormField from "../FormField/FormField";
 import { Box, Button, Typography } from "@mui/material";
 import QuestionsFormSection from "./Components/QuestionsFormSection/QuestionsFormSection";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +9,9 @@ import {
   addQuizData,
   updateLastIndices,
   updateQuiz,
-} from "../../../../actions/actions";
+} from "../../actions/actions";
 import { useParams } from "react-router-dom";
-import { getQuizById } from "../../../../selectors";
+import { getQuizById } from "../../selectors";
 
 const AddOrEditQuiz = ({ setOpen, isEdit }) => {
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const AddOrEditQuiz = ({ setOpen, isEdit }) => {
   const generateDataWithIds = useCallback(
     (values) => {
       // Handles the generation of IDs to mimic the behavior of creating entities on the frontend rather than the backend.
-      // It ensures that each entity (quiz, question, answer) receives a unique identifier before being stored in the Redux state.
+      // It ensures that each entity (quiz, question, answer) receives a unique identifier before being stored in the Redux store.
       let lastQuizIndex = quizzes.lastQuizIndex;
       let lastQuestionIndex = quizzes.lastQuestionIndex;
       let lastAnswerIndex = quizzes.lastAnswerIndex;

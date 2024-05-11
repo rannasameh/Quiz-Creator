@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   box: {
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
+    minHeight: "15vh",
     alignItems: "center",
   },
 }));

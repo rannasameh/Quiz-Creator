@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useFormikContext } from "formik";
 import { FieldArray } from "formik";
-import FormField from "../../../../../../commonComponents/FormField/FormField";
+import FormField from "../../../FormField/FormField";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { FormControlLabel, Radio } from "@mui/material";
@@ -10,7 +10,7 @@ const QuestionsFormSection = () => {
   const { values, setFieldValue } = useFormikContext();
 
   const handleSelectAnswer = (questionIndex, answerIndex) => {
-    // Fuction to handle that only one answer is selected per question
+    // Fuction to handle that only one answer is selected per question and updating is_true value
     const updatedAnswers = values.questions_answers.map((question, qIndex) => {
       if (qIndex === questionIndex) {
         return {
@@ -52,14 +52,16 @@ const QuestionsFormSection = () => {
                   alignItems: "center",
                 }}
               >
-                <Button
-                  style={{
-                    color: "black",
-                  }}
-                  onClick={() => remove(index)}
-                >
-                  <RemoveCircleOutlineIcon />
-                </Button>
+                {values.questions_answers.length > 1 && (
+                  <Button
+                    style={{
+                      color: "black",
+                    }}
+                    onClick={() => remove(index)}
+                  >
+                    <RemoveCircleOutlineIcon />
+                  </Button>
+                )}
               </Grid>
               <Grid
                 item
@@ -129,14 +131,16 @@ const QuestionsFormSection = () => {
                           alignItems: "center",
                         }}
                       >
-                        <Button
-                          style={{
-                            color: "black",
-                          }}
-                          onClick={() => remove(answerIndex)}
-                        >
-                          <RemoveCircleOutlineIcon />
-                        </Button>
+                        {question.answers.length > 1 && (
+                          <Button
+                            style={{
+                              color: "black",
+                            }}
+                            onClick={() => remove(answerIndex)}
+                          >
+                            <RemoveCircleOutlineIcon />
+                          </Button>
+                        )}
                       </Grid>
                       <Grid
                         item
