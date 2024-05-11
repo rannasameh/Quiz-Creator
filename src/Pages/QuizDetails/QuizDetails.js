@@ -9,8 +9,8 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import AddOrEditQuiz from "../../commonComponents/AddOrEditQuiz/AddOrEditQuiz";
 import { getQuizById } from "../../selectors";
-import AddOrEditQuiz from "../Quizzes/Components/AddOrEditQuiz";
 
 const QuizDetail = () => {
   const { id } = useParams();
@@ -45,16 +45,18 @@ const QuizDetail = () => {
               </Typography>
             )}
           </Box>
-          <Typography>{quiz.description}</Typography>
+          <Typography style={{ wordWrap: "break-word" }}>
+            {quiz.description}
+          </Typography>
           <a href={quiz.url} target="_blank" rel="noopener noreferrer">
             {quiz.url}
-          </a>{" "}
+          </a>
           <Typography style={{ fontSize: 18, fontWeight: 700 }}>
             Questions:
           </Typography>
           <Box style={{ display: "flex", flexDirection: "column", rowGap: 15 }}>
             {quiz.questions_answers.map((question, index) => (
-              <Box>
+              <Box key={index}>
                 <Typography style={{ fontSize: 17 }}>
                   {index + 1} - {question.text}
                 </Typography>
@@ -80,15 +82,16 @@ const QuizDetail = () => {
                 </Box>
                 <Typography>
                   False feedback: {question.feedback_false}
-                </Typography>{" "}
+                </Typography>
                 <Typography>Truefeedback : {question.feedback_true}</Typography>
               </Box>
-            ))}{" "}
+            ))}
           </Box>
         </Box>
       ) : (
         <div>Quiz not found</div>
       )}
+
       <Dialog onClose={() => setOpenEditQuiz(false)} open={openEditQuiz}>
         <AddOrEditQuiz setOpen={setOpenEditQuiz} isEdit />
       </Dialog>

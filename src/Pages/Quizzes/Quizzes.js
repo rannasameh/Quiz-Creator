@@ -1,10 +1,10 @@
 import { Box, Button, Dialog, Grid, TextField } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import quizzezData from "../../Static/Files/QuizzesData.json";
-import AddOrEditQuiz from "./Components/AddOrEditQuiz";
 import Quiz from "./Components/Quiz";
 import { useDispatch, useSelector } from "react-redux";
 import { storeQuizzesData } from "../../actions/actions";
+import AddOrEditQuiz from "../../commonComponents/AddOrEditQuiz/AddOrEditQuiz";
 
 const Quizzes = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +15,7 @@ const Quizzes = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // read quizzes from file only for the first render when no new data is added
+    // read quizzes from file only for the first render when no new data is added yet
     !quizzes.length && dispatch(storeQuizzesData(quizzezData));
   }, [dispatch, quizzes]);
 
@@ -68,8 +68,8 @@ const Quizzes = () => {
         rowSpacing={4}
         columnSpacing={4}
       >
-        {filteredData.map((quiz) => (
-          <Grid item xs={12} sm={6}>
+        {filteredData.map((quiz, index) => (
+          <Grid item xs={12} sm={6} key={index}>
             <Quiz quiz={quiz} />
           </Grid>
         ))}
